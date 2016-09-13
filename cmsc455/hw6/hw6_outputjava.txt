@@ -1,0 +1,28 @@
+multiply N by N matrices, N=100
+initialized
+N=100, c=0.0, raw time=0.0 seconds
+order N^3 normalized time=0.0
+ 
+multiply N by N matrices, N=200
+initialized
+N=200, c=0.0, raw time=0.016 seconds
+order N^3 normalized time=0.002
+ 
+multiply N by N matrices, N=400
+initialized
+N=400, c=0.0, raw time=0.125 seconds
+order N^3 normalized time=0.001953125
+ 
+multiply N by N matrices, N=800
+initialized
+N=800, c=0.0, raw time=1.203 seconds
+order N^3 normalized time=0.002349609375
+ 
+multiply N by N matrices, N=1600
+initialized
+N=1600, c=0.0, raw time=31.76 seconds
+order N^3 normalized time=0.00775390625
+
+(I set N up to 1600, in case to check the normalized time)
+Comments: when N is 100 the normalized time is 0, it seems wired, probably the calculation takes too short (program runs very fast). When N is 200 400 and 800, the normalized time is around 0.002, very close, but when N is 1600 the normalized time is 0.0077 is much larger than 0.002.
+I have run the program several times, each time I got almost the same result, when N is 100 the time is 0, when N is 200 400 and 800 the time is around 0.002, and N is 1600, the time is around 0.0077.

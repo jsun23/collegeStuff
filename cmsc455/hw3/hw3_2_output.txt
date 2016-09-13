@@ -1,0 +1,5 @@
+when grid = 1.0, dot in area = 5, area = 5.0
+when grid = 0.1, dot in area = 804, area = 8.040000000000001
+when grid = 0.01, dot in area = 81225, area = 8.1225
+when grid = 0.001, dot in area = 8126781, area = 8.126781
+when grid = 1.0E-4, dot in area = 812683653, area = 8.12683653

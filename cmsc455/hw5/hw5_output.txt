@@ -1,0 +1,64 @@
+read_wav running,  reading cat.wav
+read 4 bytes, should be 4
+first 4 bytes should be RIFF RIFF
+file has 18851 +8 bytes
+4 bytes should be WAVE WAVE
+4 bytes should be fmt  fmt 
+block has 16 bytes
+compression code = 1
+channels = 1
+rate = 11025
+avg rate = 11025
+blockalign = 1
+bits per sample = 8
+4 bytes should be data data
+chunk has 18815 bytes
+44 bytes read so far
+sound byte =90
+sound byte =82
+sound byte =72
+sound byte =64
+sound byte =60
+sound byte =63
+sound byte =69
+sound byte =83
+sound byte =92
+sound byte =103
+sound byte =-115
+sound byte =-103
+sound byte =-128
+sound byte =125
+sound byte =110
+sound byte =119
+sound byte =-123
+sound byte =-125
+sound byte =118
+smin=-128, smax=127, savg=-1
+18859 bytes read so far
+end wav_read
+power of 2 m=65536
+have 18815 points for FFT
+input min=-128.0, max=127.0, avg=-1.2446452298697848
+
+before delete high and low frequency bins 65536
+after delete high and low frequency bins 65534
+
+output min=-128.00000000013551, max=127.00000000012906, avg=127.00000000015402
+read_write running,  writing cleared.wav
+wrote 4 bytes, should be 4
+wrote first 4 bytes should be RIFF RIFF
+wrote file has 18851 +8 bytes
+wrote 4 bytes should be WAVE WAVE
+wrote 4 bytes should be fmt  fmt 
+wrote block has 16 bytes
+wrote compression code = 1
+wrote channels = 1
+wrote rate = 11025
+wrote avg rate = 11025
+wrote blockalign = 1
+wrote bits per sample = 8
+wrote 4 bytes should be data data
+wrote chunk has 18815 bytes
+44 bytes written so far
+18859 bytes written so far
+end wav_write
