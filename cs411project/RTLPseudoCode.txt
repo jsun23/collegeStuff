@@ -1,0 +1,195 @@
+RTL pseudo code
+JR
+-Jr $rs
+ IR = mem[PC]; NPC = PC + 4;
+ R1 = regs[rs];
+ PC = R1; 
+
+ JALR
+-Jalr $r
+ IR = mem[PC]; NPC = PC + 4
+ R1 = regs[rs]; regs[31] = NPC;
+ PC = R1; 
+
+ADD,
+-Add $rd $rs $rt
+IR = mem[PC]; NPC = PC + 4;
+R1 = regs[rs]; R2 = regs[rt]; PC = NPC;
+X = R1 + R2;
+regs[$rd] = x; 
+
+ADDU,
+-Addu $rd $rs $rt
+Ir = mem[PC]; NPC = PC+4;
+R1 = regs[rs]; R2 = regs[rt]; PC =NPC;
+X= R1+R2;
+regs[rd] = X; 
+
+SUB,
+-SUB $rd $rs $rt
+Ir = mem[PC]; NPC = PC + 4;
+R1 = regs[rs]; R2 = regs[rt]; PC = NPC;
+X = R1 - R2;
+regs[$rd] = x; 
+
+SUBU,
+-SUBU $rd $rs $rt
+Ir = mem[PC]; NPC = PC+4;
+R1 = regs[rs]; R2 = regs[rt]; PC =NPC;
+X= R1-R2;
+regs[rd] = X; 
+
+AND
+-And $rd $rs $rt
+Ir = mem[PC]; NPC = PC + 4;
+R1 = regs[rs]; R2 = regs[rt]; PC = NPC;
+X = R1 & R2;
+regs[$rd] = x; 
+
+OR
+-OR $rd $rs $rt
+Ir = mem[PC]; NPC = PC + 4;
+R1 = regs[rs]; R2 = regs[rt]; PC = NPC;
+X = R1 | R2;
+regs[$rd] = x; 
+
+XOR
+-XOR $rd $rs $rt
+Ir = mem[PC]; NPC = PC + 4;
+R1 = regs[rs]; R2 =regs[rt]; PC = NPC;
+X = R1 ^ R2;
+regs[$rd] = x; 
+
+NOR,
+-NOR $rd $rs $rt
+Ir = mem[PC]; NPC = PC + 4;
+R1 = regs[rs]; R2 =regs[rt]; PC = NPC;
+X = ~(R1 | R2); 
+regs[$rd] = x;
+
+J
+-j imm
+ IR = mem[PC]; NPC = PC + 4;
+ PC = imm <<2; 
+
+ JAL,
+-jal imm
+ IR = mem[PC]; NPC = PC + 4;
+ reg[31] = NPC;
+ PC = imm <<2;
+
+BEQ,
+beq $s, $t, offset
+Ir = mem[PC]; NPC = PC+4;
+R1 = regs[rs]; R2 = regs[rt]; IMM = sext(offset);
+X= R1-R2;
+(x==0)?PC=NPC+(IMM<<2):PC=NPC; 
+
+BNE,
+bne $s, $t, offset
+Ir = mem[PC]; NPC = PC+4;
+R1 = regs[rs]; R2 = regs[rt]; IMM = sext(offset);
+X= R1-R2;
+(x!=0)?PC=NPC+(IMM<<2):PC=NPC; 
+
+BLEZ,
+blez $s, offset
+ IR = mem[PC]; NPC = PC +4
+ R1 = regs[rs]; R2 = $0=0; IMM = SE(offset)
+ (R1 <= 0) ? PC = NPC + (imm << 2): PC = NPC 
+
+BGTZ,
+bgtz $s, offset
+IR = mem[PC]; NPC = PC +4
+ R1 = regs[rs]; R2 = $0=0; IMM = SE(offset)
+ (R1 > 0) ? PC = NPC + (imm << 2): PC = NPC 
+
+ ADDI,
+-Addi $rt $rs IMM
+Ir = mem[PC]; NPC = PC + 4;
+R1 = regs[rs]; IMM = SEXT(IR[0:15]); PC = NPC;
+X = R1 + IMM;            
+regs[$rt] = x; 
+
+ADDIU,
+-Addiu $rt $rs IMM
+Ir = mem[PC]; NPC = PC + 4;
+R1 = regs[rs]; IMM = SEXT(IR[0:15]); PC = NPC;
+X = R1 + IMM;            
+regs[$rt] = x;
+
+ANDI
+-Andi $rt $rs IMM
+Ir = mem[PC]; NPC = PC + 4;
+R1 = regs[rs]; IMM = SEXT(IR[0:15]); PC = NPC;
+X = R1 & IMM;            
+regs[$rt] = x; 
+
+ORI,
+-ORI $rt $rs IMM
+Ir = mem[PC]; NPC = PC + 4;
+R1 = regs[rs]; IMM = SEXT(IR[0:15]); PC = NPC;
+X = R1 | IMM;            
+regs[$rt] = x; 
+
+XORI,
+-XORI $rt $rs IMM
+IR = mem[PC]; NPC = PC + 4;
+R1 = regs[rs]; IMM = SEXT(IR[0:15]); PC = NPC;
+X = R1 ^ IMM;            
+regs[$rt] = x; 
+
+LUI
+IR = mem[PC]; NPC = PC + 4;
+IMM = SEXT(IR[0:15]); PC = NPC;
+R1 = $0=0
+X = R1 + IMM<<16;
+regs[$rt] = X; 
+
+LW
+-lw $rt offset($rs)
+ IR = mem[PC]; NPC = PC + 4;
+ R1 = regs[$rs]; IMM = SE(offset);
+ X = R1 + IMM;
+MemDataReg = mem[X];
+ regs[$rt] = MemDataReg
+
+ SW
+-sw $rt offset($rs)
+ IR = mem[PC]; NPC = PC + 4;
+ R >= regs[rs]; IMM = SE(offset);
+ x = R1 + IMM;
+ mem[x] = R2; 
+
+SPD,
+- spd imm($rd)
+ IR = mem[PC]; NPC = PC + 4;
+ R1 = regs[rd];
+ X = R1 + IMM;
+ RobotNumIn = X;
+
+ROT,
+- rot imm($rd)
+Ir = mem[PC]; NPC = PC+4;
+ R1 =regsR[rd];
+ X = R1 + IMM;
+ RobotNumIn = X;
+
+ASCN,
+-ascn $rd
+IR = mem[PC]; NPC = PC + 4;
+regs[rd] = RobotNumOut;
+
+DSCN,
+-dscn $rd
+IR = mem[PC]; NPC = PC + 4;
+regs[rd] = RobotNumOut;
+
+FIR
+- fir imm($rd)
+ IR = mem[PC]; NPC = PC + 4;
+ R1 = regs[rd];
+ X = R1 + IMM;
+ RobotNumIN = X;
+
+

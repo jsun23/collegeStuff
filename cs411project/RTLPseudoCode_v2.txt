@@ -1,0 +1,364 @@
+Clock Speed = 22
+IF requires 354, 17 cycles
+ID requires 15, 1 cycle
+EX requires 22,  1 cycle
+DM (RobotMemory) requires 502, 23 cycles
+WB requires < 22, 1  cycle
+
+Key -nameOfState  state #
+RTL pseudo code
+
+-if0 state 0
+MemDataReg = mem[PC]; NPC = PC + 4; state = 1 
+
+-if1 state 1
+state = 2 #waiting for memory
+
+-if2 state 2
+state = 3 #waiting for memory
+
+-if3 state 3
+state = 4 #waiting for memory
+
+-if4 state 4
+state = 5 #waiting for memory
+
+-if5 state 5
+state = 6 #waiting for memory
+
+-if6 state 6
+state = 7 #waiting for memory
+
+-if7 state 7
+state = 8 #waiting for memory
+
+-if8 state 8
+state = 9 #waiting for memory
+
+-if9 state 9
+state = 10 #waiting for memory
+
+…… continues in the same pattern until state 17NOTE ALREADY A FUNCTION 
+
+-if17 state 17
+MemDataReg = mem[PC];state = 19 #IF done
+
+-if18 state 18 //this is just for load word
+memDataReg = mem[X] state 22;
+
+-id state 19
+R1 = reg[IR(21:25)]; R2 = reg[IR(16:20)]; IMM = SEXT(IR[0:15]); PC = NPC; state = decode(IR);
+
+-wb0 state 20
+regs[$rd] = x; state = 0;
+
+-wb1 state 21
+regs[$rd] = BOTOUT; state = 0;
+
+-wb2 state 22
+regs[$rd] = memDataReg state = 0;
+
+-wb3 state 23
+reg[31] = WD state = 0;
+
+ 
+-dm0 state 24
+mem[x] = R2; state = 0 ; 
+
+-dm1 state 25
+RobotNumIn = X; state = 26;
+….waiting for robot from state 26 - 47
+
+-dm49 state 48
+RobotNumIn = RobotNumIn state = 0
+
+-dm50 state 49
+RobotNumOut = RobotNumOut state = 50
+
+….waiting for robot from state 50 - 71 NOTE ALREADY A FUNCTION
+
+-dm51 state 72
+reg[$rd] = Olano's input state = 21
+
+ 
+JR state = 73
+-Jr $rs
+ IF(IR = mem[PC]; NPC = PC + 4;) state = 1 
+ ID(R1 = regs[rs];)
+
+ PC = R1; state= 0 
+
+
+JALR state = 74
+-Jalr $r
+ IF(IR = mem[PC]; NPC = PC + 4)
+ ID(R1 = regs[rs]; regs[31] = NPC;)
+
+ PC = R1; state = 0; 
+
+
+ADD, state = 75
+-Add $rd $rs $rt
+IF(Ir = mem[PC]; NPC = PC + 4;)
+ID(R1 = regs[rs]; R2 = regs[rt]; PC = NPC;)
+
+X = R1 + R2;state = 20
+
+WB0(regs[$rd] = x; )
+
+
+ADDU, state = 76
+-Addu $rd $rs $rt
+IF(Ir = mem[PC]; NPC = PC+4;)
+ID(R1 = regs[rs]; R2 = regs[rt]; PC =NPC;)
+
+X= R1+R2; state = 20; 
+
+WB0(regs[rd] = X; )
+
+SUB, state = 77
+-SUB $rd $rs $rt
+IF(Ir = mem[PC]; NPC = PC + 4;)
+ID(R1 = regs[rs]; R2 = regs[rt]; PC = NPC;)
+
+X = R1 - R2; state = 20
+
+WB0(regs[$rd] = x; )
+
+SUBU, state = 78
+-SUBU $rd $rs $rt
+IF(Ir = mem[PC]; NPC = PC+4;)
+ID(R1 = regs[rs]; R2 = regs[rt]; PC =NPC;)
+
+X= R1-R2;state = 20
+
+WB0(regs[rd] = X;) 
+
+AND state = 79
+-And $rd $rs $rt
+IF(Ir = mem[PC]; NPC = PC + 4;)
+ID(R1 = regs[rs]; R2 = regs[rt]; PC = NPC;)
+
+X = R1 & R2;state = 20
+
+WB0(regs[$rd] = x; )
+
+OR state = 80
+-OR $rd $rs $rt
+IF(Ir = mem[PC]; NPC = PC + 4;)
+ID(R1 = regs[rs]; R2 = regs[rt]; PC = NPC;)
+
+X = R1 | R2; state = 20
+
+WB0(regs[$rd] = x; )
+
+
+XOR state = 81
+-XOR $rd $rs $rt
+IF(Ir = mem[PC]; NPC = PC + 4;)
+ID(R1 = regs[rs]; R2 =regs[rt]; PC = NPC;)
+
+X = R1 ^ R2;state = 20
+
+WB0(regs[$rd] = x; )
+
+
+NOR, state = 82
+-NOR $rd $rs $rt
+IF(Ir = mem[PC]; NPC = PC + 4;)
+ID(R1 = regs[rs]; R2 =regs[rt]; PC = NPC;)
+
+X = (~R1) | (~R2); state = 20
+
+WB0(regs[$rd] = x;)
+
+
+J, state = 83
+-j imm
+ IF(IR = mem[PC]; NPC = PC + 4;)
+
+ PC = imm <<2; state = 0
+
+ JAL, state = 84
+-jal imm
+ IF(IR = mem[PC]; NPC = PC + 4;)
+
+WD = NPC;
+PC = imm <<2; state = 23
+
+WB3(reg[31] = WD); 
+
+
+BEQ, state = 85
+beq $s, $t, offset state = 85
+IF(Ir = mem[PC]; NPC = PC+4;)
+ID(R1 = regs[rs]; R2 = regs[rt]; IMM = sext(offset);)
+
+X= R1-R2;
+(x==0)?PC=NPC+(IMM<<2):PC=NPC; 
+state = 0
+
+
+BNE, state = 86
+bne $s, $t, offset
+IF(Ir = mem[PC]; NPC = PC+4;)
+ID(R1 = regs[rs]; R2 = regs[rt]; IMM = sext(offset);)
+
+X= R1-R2;
+(x!=0)?PC=NPC+(IMM<<2):PC=NPC; 
+state = 0; 
+
+
+BLEZ, state = 87
+blez $s, offset
+ IF(IR = mem[PC]; NPC = PC +4)
+ ID(R1 = regs[rs]; R2 = $0=0; IMM = SE(offset))
+
+ (R1 <= 0) ? PC = NPC + (imm << 2): PC = NPC 
+state = 0
+
+
+BGTZ, state = 88
+bgtz $s, offset
+IF(IR = mem[PC]; NPC = PC +4)
+ ID(R1 = regs[rs]; R2 = $0=0; IMM = SE(offset))
+
+ (R1 > 0) ? PC = NPC + (imm << 2); PC = NPC
+ state = 0
+
+
+ADDI, state = 89
+-Addi $rt $rs IMM
+IF(Ir = mem[PC]; NPC = PC + 4;)
+ID(R1 = regs[rs]; IMM = SEXT(IR[0:15]); PC = NPC;)
+
+
+X = R1 + IMM;state 20;
+        
+WB0(regs[$rd] = x;) 
+
+
+ADDIU, state = 90
+-Addiu $rt $rs IMM
+IF(Ir = mem[PC]; NPC = PC + 4;)
+ID(R1 = regs[rs]; IMM = SEXT(IR[0:15]); PC = NPC;)
+
+X = R1 + IMM; state 20;
+            
+WB0(regs[$rd] = x;)
+
+
+ANDI state = 91
+-Andi $rt $rs IMM
+IF(Ir = mem[PC]; NPC = PC + 4;)
+ID(R1 = regs[rs]; IMM = SEXT(IR[0:15]); PC = NPC;)
+
+X = R1 & IMM; state 20;
+            
+WB0(regs[$rd] = x;)s
+
+
+ORI, state = 92
+-ORI $rt $rs IMM
+IF(Ir = mem[PC]; NPC = PC + 4;)
+ID(R1 = regs[rs]; IMM = SEXT(IR[0:15]); PC = NPC;)
+
+X = R1 | IMM;state 20;
+            
+WB0(regs[$rd] = x;)
+
+
+XORI, state = 93
+-XORI $rt $rs IMM
+IF(IR = mem[PC]; NPC = PC + 4;)
+ID(R1 = regs[rs]; IMM = SEXT(IR[0:15]); PC = NPC;)
+
+X = R1 ^ IMM; state 20
+        
+WB0(regs[$rd] = x;)
+
+
+LUI state = 94
+IF(IR = mem[PC]; NPC = PC + 4;)
+ID(IMM = SEXT(IR[0:15]); PC = NPC;)
+
+R1 = $0=0
+X = R1 + IMM <<16;state 20;
+
+WB0(regs[$rd] = X; )
+
+
+LW state = 95
+-lw $rt offset($rs)
+IF( IR = mem[PC]; NPC = PC + 4;)
+
+ ID(R1 = regs[$rs]; IMM = SE(offset);)
+
+
+ X = R1 + IMM;state 18;
+
+IF18(memDataReg = mem[X]; state = 22;)
+
+ WB2(regs[$rd] = memDataReg;)
+
+ 
+ SW  = 96
+-sw $rt offset($rs)
+ IF(IR = mem[PC]; NPC = PC + 4;)
+
+ID( R1 = regs[$rs]; IMM = SE(offset); R2 = regs[$rt])
+
+ x = R1 + IMM;state = 24;
+                                                                                                          
+ DM(0)(mem[x] = R2;) 
+
+ 
+ SPD, = 97
+The general idea spd imm($rd) set robot speed to $rd+imm ( I was just using this for reference, I don't think we need this line in the answer :) )
+- spd imm($rd)
+IF( IR = mem[PC]; NPC = PC + 4;)
+
+ID( R1 = regs[rd];)
+
+ X = R1 + IMM; state = 25;
+
+DM1( RobotNumIn = X;)
+
+
+ROT, = 98
+The general idea rot imm($rd) rotation the robot by $rd+imm degree.
+- rot imm($rd)
+IF(Ir = mem[PC]; NPC = PC+4;)
+ID( R1 =regsR[rd];)
+
+ X = R1 + IMM; state 25
+
+DM1( RobotNumIn = X;)
+
+
+ASCN, = 99
+-ascn $rd
+IR = mem[PC]; NPC = PC + 4; state = 49;
+
+DM50(RobotNumOut = RobotNumOut state = 50)
+
+WB1(regs[rd] = RobotNumOut;)
+
+
+DSCN, = 100
+-dscn $rd
+IR = mem[PC]; NPC = PC + 4; state = 26;
+
+DM50(RobotNumOut = RobotNumOut state = 50)
+
+WB1(regs[rd] = RobotNumOut;)
+FIR = 101
+- fir imm($rd)
+ IF(IR = mem[PC]; NPC = PC + 4;)
+
+ ID(R1 = regs[rd];)
+
+ X = R1 + IMM; state 25
+
+DM1( RobotNumIn = X;)
+

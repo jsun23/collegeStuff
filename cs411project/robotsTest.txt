@@ -1,0 +1,4 @@
+robot1 Main.out
+robot2 Main.out
+robot3 Main.out
+robot4 Main.out
